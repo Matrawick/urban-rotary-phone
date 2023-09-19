@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Farsi Alphabet</title>
+</head>
+<style>
+    .hidden {
+        visibility: hidden;
+    }
+    
+    .connector {
+      color: white;
+    }
+    span {
+        font-size: 60px;
+    }
+    </style>
+<body>
+    <h1>Alphabet</h1>
+    <input type="text" id="userInput" placeholder="Type answer here">
+    <button id="check-answer" onclick="checkAnswer()">Check Answer</button>
+    <button id="next-question" class="hidden" onclick="goToNextQuestion()">Next Question</button>
+    <p id="result" class="hidden"></p>
+    <div id="question-container"><div id="question-value"></div></div>
+    <div id = "container"></div>
+    <div id="results">
+        
+    </div>
+
+    <script>
+        // Define the quiz. farsi letter, english equivalent, has been shown to user, 
+        // how to display? "final" = by itself, "initial" = have a letter after it...
+    
+        const quiz = [
+            ["ب","b",false, "final"],    
+            ["ب","b",false, "initial"],
+            ["ت","t",false, "final"]
+        ]
+        /*    
+        const quiz = [
+            ["ب","b",false, "final"],    
+            ["ب","b",false, "initial"],
+            ["ت","t",false, "final"],
+            ["ت","t",false, "initial"],
+            ["پ","p",false, "final"],
+            ["پ","p",false, "initial"],
+            ["ث","s",false, "final"],
+            ["ث","s",false, "initial"],            
+            ["ج","j",false, "final"],
+            ["ج","j",false, "initial"],
+            ["چ","ch",false, "final"],
+            ["چ","ch",false, "initial"],
+            ["ح","h",false, "final"],
+            ["ح","h",false, "initial"],
+            ["خ","kh",false, "final"],
+            ["خ","kh",false, "initial"],
+            ["ن","n",false, "final"],
+            ["ن","n",false, "initial"],
+            ["م","m",false, "final"],
+            ["م","m",false, "initial"],
+            ["د","d",false, "final"],
+            ["ر","r",false, "final"],
+            ["ز","z",false, "final"],
+            ["ژ","zh",false, "final"],
+            ["ش","sh",false, "final"],
+            ["ش","sh",false, "initial"],
+            ["و","v",false, "final"],
+            ["ف","f",false, "final"],
+            ["ف","f",false, "initial"],
+            ["ق","gh",false, "final"],
+            ["ق","gh",false, "initial"],
+            ["ص","s",false, "final"],
+            ["ص","s",false, "initial"],
+            ["ض","z",false, "final"],
+            ["ض","z",false, "initial"],
+            ["ط","t",false, "final"],
+            ["ظ","z",false, "final"],
+            ["ی","y",false, "final"],
+            ["ی","y",false, "initial"],
+            ["ک","k",false, "initial"], 
+            ["ک","k",false, "final"],
+            ["گ","g",false, "initial"],
+            ["گ","g",false, "final"],
+            ["ل","l",false, "initial"],
+            ["ل","l",false, "final"],
+            ["غ","gh",false, "final-after-connector"],
+            ["غ","gh",false, "final-after-non-connector"],
+            ["غ","gh",false, "medial"],
+            ["غ","gh",false, "initial"],
+            ["ع","a",false, "final-after-connector"],
+            ["ع","a",false, "final-after-non-connector"],
+            ["ع","a",false, "medial"],
+            ["ع","a",false, "initial"],
+            ["ه","h",false, "final-after-connector"],
+            ["ه","h",false, "final-after-non-connector"],
+            ["ه","h",false, "medial"],
+            ["ه","h",false, "initial"],
+            ["ا","a",false, "final"],            
+        ];
+        */
+
+        CURRENT_QUESTION_INDEX = 0;
+        CORRECT_LIST = [];
+        INCORRECT_LIST = [];
+
+        // Display the keys of the hash table
+        //const keyList = Object.keys(hashTable);
+       //document.getElementById("keyList").textContent = keyList.join(", ");
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
+       
+        shuffleArray(quiz);
+        displayLetter(quiz[CURRENT_QUESTION_INDEX], false); // getRandomInt(quiz.length - 1)]
+        
+
+        function getLetterDiv(alphabetItem) {
+            const new_child = document.createElement("div");
+
+            // Create a new span element
+            const span1 = document.createElement("span");
+            const span2 = document.createElement("span");
+            const span3 = document.createElement("span");
+            // Set the class attribute of the span element to "connector"
+            span1.className = "connector";
+            span3.className = "connector";
+
+            // Set the text content of the span element to the current item
+            span2.textContent = alphabetItem[0];
+
+            // Add surrounding letters depending on what is being asked. 
+            if (alphabetItem[3] === "initial") {
+                span3.textContent = "ش";
+            }
+            else if (alphabetItem[3] === "medial") {
+                span1.textContent = "ش";
+                span3.textContent = "ش";
+            }
+            else if (alphabetItem[3] === "final-after-connector") {
+                span1.textContent = "ش";
+                
+            }
+            else if (alphabetItem[3] === "final-after-non-connector") {
+                span1.textContent = "د";
+            }
+            new_child.appendChild(span1);
+            new_child.appendChild(span2);
+            new_child.appendChild(span3);
+            return new_child;
+        }
+
+        function getLetterDivWithAnswer(alphabetItem) {
+            const new_child = document.createElement("div");
+
+            // Create a new span element
+            const span1 = document.createElement("span");
+            const span2 = document.createElement("span");
+            const span3 = document.createElement("span");
+            // Set the class attribute of the span element to "connector"
+            span1.className = "connector";
+            span3.className = "connector";
+
+            // Set the text content of the span element to the current item
+            span2.textContent = alphabetItem[0];
+
+            // Add surrounding letters depending on what is being asked. 
+            if (alphabetItem[3] === "initial") {
+                span3.textContent = "ش";
+            }
+            else if (alphabetItem[3] === "medial") {
+                span1.textContent = "ش";
+                span3.textContent = "ش";
+            }
+            else if (alphabetItem[3] === "final-after-connector") {
+                span1.textContent = "ش";
+                
+            }
+            else if (alphabetItem[3] === "final-after-non-connector") {
+                span1.textContent = "د";
+            }
+            const span4 = document.createElement("span");
+            span4.textContent = "  " + alphabetItem[1];
+            new_child.appendChild(span1);
+            new_child.appendChild(span2);
+            new_child.appendChild(span3);
+            new_child.appendChild(span4);
+            return new_child;
+        }
+
+
+        /* Display the given letter.  */
+        function displayLetter(alphabetItem, displayAnswer) {
+            const parent_container = document.getElementById("question-container");
+            const child = document.getElementById("question-value");
+            let new_child = null;
+            if (displayAnswer) {
+                new_child = getLetterDivWithAnswer(alphabetItem);
+            }
+            else {
+                new_child = getLetterDiv(alphabetItem);
+            }
+            
+
+            // Append the div element to the container div
+            parent_container.replaceChild(new_child, child);
+            new_child.setAttribute("id", "question-value");
+        }
+
+        function displayLetterList(quizList, parentDiv) {
+            quizList.forEach(function(item) {
+                letterDiv = getLetterDivWithAnswer(item);
+                parentDiv.appendChild(letterDiv);
+            });
+        }
+
+        function checkAnswer() {
+            const userInput = document.getElementById("userInput").value;
+            const element = document.getElementById("result"); 
+            const nextButton = document.getElementById("next-question");
+            const checkAnswerButton = document.getElementById("check-answer");
+
+            let displayText = "";
+            let answerClass = "";
+            if (userInput === quiz[CURRENT_QUESTION_INDEX][1] ) {
+                displayText = "Correct!";
+                answerClass = "correct";
+                CORRECT_LIST.push(quiz[CURRENT_QUESTION_INDEX]);
+            }
+            else {
+                displayText = "Wrong... correct answer is " + quiz[CURRENT_QUESTION_INDEX][1];
+                answerClass = "wrong";
+                INCORRECT_LIST.push(quiz[CURRENT_QUESTION_INDEX]);
+            }
+            // Show user result
+            element.textContent = displayText;
+            element.classList.toggle("hidden"); 
+            nextButton.classList.toggle("hidden");
+            checkAnswerButton.classList.toggle("hidden");
+        };
+
+        function endOfQuiz() {
+            // Disable the Next Question button. 
+            const nextButton = document.getElementById("next-question");
+            nextButton.classList.toggle("hidden");
+            // Remove the question being displayed
+            const parent_container = document.getElementById("question-container");
+            const child = document.getElementById("question-value");
+            parent_container.removeChild(child);
+
+            // Display the results
+            // Add a incorrect header
+            const incorrectHeader = document.createElement("h3");
+            incorrectHeader.textContent = "Incorrect";
+            parent_container.appendChild(incorrectHeader);
+            displayLetterList(INCORRECT_LIST, parent_container);
+
+
+            // Add a correct header
+            const correctHeader = document.createElement("h3");
+            correctHeader.textContent = "Correct";
+            parent_container.appendChild(correctHeader);
+            displayLetterList(CORRECT_LIST, parent_container);
+
+        }
+
+        function goToNextQuestion() {
+            CURRENT_QUESTION_INDEX++;
+            // Add a check to see if finished with all of the questions.
+            if (CURRENT_QUESTION_INDEX >= quiz.length) {
+                endOfQuiz();
+            }
+            else {
+                displayLetter(quiz[CURRENT_QUESTION_INDEX], false);
+
+                const element = document.getElementById("result"); 
+                const nextButton = document.getElementById("next-question");
+                const checkAnswerButton = document.getElementById("check-answer");
+                const userInput = document.getElementById("userInput");
+
+                element.classList.toggle("hidden"); 
+                nextButton.classList.toggle("hidden");
+                checkAnswerButton.classList.toggle("hidden");
+
+                userInput.value = "";
+            }
+        };
+
+        
+    </script>
+</body>
+</html>
