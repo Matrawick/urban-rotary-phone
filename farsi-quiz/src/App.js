@@ -1,102 +1,130 @@
 import Quiz from "./Components/Quiz";
 import "./App.css";
+import React, { useState } from "react";
 
 function App() {
-
+  
+  const test = [['<span style="color:black">غ<span><span style="color:white">ش<span>', 'a'],
+  ['<span style="color:white">ش<span><span style="color:black">غ<span>', "gh"]]
   const singleLetters = [
-    ["ت", "t", false, "final"],
-    ["پ", "p", false, "final"],
-    ["ث", "s", false, "final"],
-    ["ج", "j", false, "final"],
-    ["چ", "ch", false, "final"],
-    ["ح", "h", false, "final"],
-    ["خ", "kh", false, "final"],
-    ["ن", "n", false, "final"],
-    ["م", "m", false, "final"],
-    ["د", "d", false, "final"],
-    ["ر", "r", false, "final"],
-    ["ز", "z", false, "final"],
-    ["ژ", "zh", false, "final"],
-    ["ش", "sh", false, "final"],
-    ["و", "v", false, "final"],
-    ["ف", "f", false, "final"],
-    ["ق", "gh", false, "final"],
-    ["ص", "s", false, "final"],
-    ["ض", "z", false, "final"],
-    ["ط", "t", false, "final"],
-    ["ظ", "z", false, "final"],
-    ["ی", "y", false, "final"],
-    ["ک", "k", false, "final"],
-    ["گ", "g", false, "final"],
-    ["ل", "l", false, "final"],
-    ["غ", "gh", false, "final-after-non-connector"],
-    ["ع", "a", false, "final-after-non-connector"],
-    ["ه", "h", false, "final-after-non-connector"],
-    ["ا", "a", false, "final"]
-  ]
-  const quiz = [
-    ["ب", "b", false, "final"],
-    ["ب", "b", false, "initial"],
-    ["ت", "t", false, "final"],
-    ["ت", "t", false, "initial"],
-    ["پ", "p", false, "final"],
-    ["پ", "p", false, "initial"],
-    ["ث", "s", false, "final"],
-    ["ث", "s", false, "initial"],
-    ["ج", "j", false, "final"],
-    ["ج", "j", false, "initial"],
-    ["چ", "ch", false, "final"],
-    ["چ", "ch", false, "initial"],
-    ["ح", "h", false, "final"],
-    ["ح", "h", false, "initial"],
-    ["خ", "kh", false, "final"],
-    ["خ", "kh", false, "initial"],
-    ["ن", "n", false, "final"],
-    ["ن", "n", false, "initial"],
-    ["م", "m", false, "final"],
-    ["م", "m", false, "initial"],
-    ["د", "d", false, "final"],
-    ["ر", "r", false, "final"],
-    ["ز", "z", false, "final"],
-    ["ژ", "zh", false, "final"],
-    ["ش", "sh", false, "final"],
-    ["ش", "sh", false, "initial"],
-    ["و", "v", false, "final"],
-    ["ف", "f", false, "final"],
-    ["ف", "f", false, "initial"],
-    ["ق", "gh", false, "final"],
-    ["ق", "gh", false, "initial"],
-    ["ص", "s", false, "final"],
-    ["ص", "s", false, "initial"],
-    ["ض", "z", false, "final"],
-    ["ض", "z", false, "initial"],
-    ["ط", "t", false, "final"],
-    ["ظ", "z", false, "final"],
-    ["ی", "y", false, "final"],
-    ["ی", "y", false, "initial"],
-    ["ک", "k", false, "initial"],
-    ["ک", "k", false, "final"],
-    ["گ", "g", false, "initial"],
-    ["گ", "g", false, "final"],
-    ["ل", "l", false, "initial"],
-    ["ل", "l", false, "final"],
-    ["غ", "gh", false, "final-after-connector"],
-    ["غ", "gh", false, "final-after-non-connector"],
-    ["غ", "gh", false, "medial"],
-    ["غ", "gh", false, "initial"],
-    ["ع", "a", false, "final-after-connector"],
-    ["ع", "a", false, "final-after-non-connector"],
-    ["ع", "a", false, "medial"],
-    ["ع", "a", false, "initial"],
-    ["ه", "h", false, "final-after-connector"],
-    ["ه", "h", false, "final-after-non-connector"],
-    ["ه", "h", false, "medial"],
-    ["ه", "h", false, "initial"],
-    ["ا", "a", false, "final"],
+    ["ت", "t"],
+    ["پ", "p"],
+    ["ث", "s"],
+    /* ["ج", "j"],
+    ["چ", "ch"],
+    ["ح", "h"],
+    ["خ", "kh"],
+    ["ن", "n"],
+    ["ن", "m"],
+    ["د", "d"],
+    ["ر", "r"],
+    ["ز", "z"],
+    ["ژ", "zh"],
+    ["ش", "sh"],
+    ["و", "v"],
+    ["ف", "f"],
+    ["ق", "gh"],
+    ["ص", "s"],
+    ["ض", "z"],
+    ["ط", "t"],
+    ["ظ", "z"],
+    ["ی", "y"],
+    ["ک", "k"],
+    ["گ", "g"],
+    ["ل", "l"],
+    ["غ", "gh"],
+    ["ع", "a"],
+    ["ه", "h"],
+    ["ا", "a"]
+    */
   ];
+  const farsiAlphabet = [
+    ["ب", "b"],
+    ['<span style="color:black">ب<span><span style="color:white">ش<span>', "b"],
+    ["ت", "t"],
+    ['<span style="color:black">ت<span><span style="color:white">ش<span>', "t"],
+    ["پ", "p"],
+    ['<span style="color:black">پ<span><span style="color:white">ش<span>', "p"],
+    ["ث", "s"],
+    ['<span style="color:black">ث<span><span style="color:white">ش<span>', "s"],
+    ["ج", "j"],
+    ['<span style="color:black">ج<span><span style="color:white">ش<span>', "j"],
+    ["چ", "ch"],
+    ['<span style="color:black">چ<span><span style="color:white">ش<span>', "ch"],
+    ["ح", "h"],
+    ['<span style="color:black">ح<span><span style="color:white">ش<span>', "h"],
+    ["خ", "kh"],
+    ['<span style="color:black">خ<span><span style="color:white">ش<span>', "kh"],
+    ["ن", "n"],
+    ['<span style="color:black">ن<span><span style="color:white">ش<span>', "n"],
+    ["م", "m"],
+    ['<span style="color:black">م<span><span style="color:white">ش<span>', "m"],
+    ["د", "d"],
+    ["ر", "r"],
+    ["ز", "z"],
+    ["ژ", "zh"],
+    ["ش", "sh"],
+    ['<span style="color:black">ش<span><span style="color:white">ش<span>', "sh"],
+    ["و", "v"],
+    ["ف", "f"],
+    ['<span style="color:black">ث<span><span style="color:white">ش<span>', "f"],
+    ["ق", "gh"],
+    ['<span style="color:black">ق<span><span style="color:white">ش<span>', "gh"],
+    ["ص", "s"],
+    ['<span style="color:black">ص<span><span style="color:white">ش<span>', "s"],
+    ["ض", "z"],
+    ['<span style="color:black">ض<span><span style="color:white">ش<span>', "z"],
+    ["ط", "t"],
+    ["ظ", "z"],
+    ["ی", "y"],
+    ['<span style="color:black">ی<span><span style="color:white">ش<span>', "y"],
+    ["ک", "k"],
+    ['<span style="color:black">ک<span><span style="color:white">ش<span>', "k"],
+    ["گ", "g"],
+    ['<span style="color:black">گ<span><span style="color:white">ش<span>', "g"],
+    ['<span style="color:black">ل<span><span style="color:white">ش<span>', "l"],
+    ["ل", "l"],
+    ['<span style="color:white">ش<span><span style="color:black">غ<span>', "gh"], // final-after-connector
+    ['<span style="color:black">غ<span><span style="color:white">ر<span>', "gh"], // final-after-non-connector
+    ['<span style="color:white">ش<span><span style="color:black">غ<span><span style="color:white">ش<span>', "gh"], // medial
+    ["غ", "gh"],
+    ['<span style="color:white">ش<span><span style="color:black">ع<span>', "gh"], // final-after-connector
+    ['<span style="color:black">ع<span><span style="color:white">ر<span>', "gh"], // final-after-non-connector
+    ['<span style="color:white">ش<span><span style="color:black">ع<span><span style="color:white">ش<span>', "gh"], // medial
+    ["ع", "gh"],
+    ['<span style="color:white">ش<span><span style="color:black">ه<span>', "gh"], // final-after-connector
+    ['<span style="color:black">ه<span><span style="color:white">ر<span>', "gh"], // final-after-non-connector
+    ['<span style="color:white">ش<span><span style="color:black">ه<span><span style="color:white">ش<span>', "gh"], // medial
+    ["ه", "gh"],
+    ["ا", "a"],
+  ];
+
+  function shuffleArray(array) {
+    console.log("How often does this get called?");
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+  }
+  shuffleArray(farsiAlphabet);
+
+  let [isQuizComplete, setIsQuizComplete] = useState(false);
+
+  function endQuiz() {
+    setIsQuizComplete(true);
+  }
+
+  /*
+<div className="App">
+      {!isQuizComplete && <Quiz questAnswerPairs={farsiAlphabet} title="Farsi Alphabet" onEndQuiz={endQuiz} />}
+      {isQuizComplete && <p>Complete</p>}
+    </div>
+  */
+
   return (
     <div className="App">
-      <Quiz />
+      <AlphabetChart />
     </div>
   );
 }

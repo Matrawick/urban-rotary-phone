@@ -1,0 +1,12 @@
+
+.notSubmitted {
+    background-color: transparent;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+color: red;     
+}
