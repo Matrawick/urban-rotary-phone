@@ -1,4 +1,5 @@
 import Quiz from "./Components/Quiz";
+import AlphabetChart from "./Components/AlphabetChart";
 import "./App.css";
 import React, { useState } from "react";
 

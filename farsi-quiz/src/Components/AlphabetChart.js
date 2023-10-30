@@ -1,9 +1,10 @@
 import React from 'react';
+import LetterTable from './LetterTable';
 
 
 function AlphabetChart() {
 
-    alphabet = [
+    const alphabet = [
         {'letter':'ت', 'sound':'t'},
         {'letter':'پ', 'sound':'p'},
         {'letter':'ج', 'sound':'j'},
@@ -36,11 +37,10 @@ function AlphabetChart() {
         {'letter':'ا', 'sound':'a'},
         {'letter':'ب', 'sound':'b'},
         {'letter':'م', 'sound':'m'}
-    ]
+    ];
 
     return (
-        <div>
-
-        </div>
+        <LetterTable letters={alphabet} />
     )
 }
+export default AlphabetChart;
