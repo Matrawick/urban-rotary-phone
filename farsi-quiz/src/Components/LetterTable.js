@@ -1,11 +1,28 @@
-import React from "react";
-// import LetterTable from './LetterTable';
+import React, { useState } from "react";
+import LetterInfo from './LetterTable';
+
+
 
 function LetterCell(props) {
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   return (
-    <td>
-      <p>{props.letter}</p>
-      <p>{props.sound}</p>
+    <td onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <p> {props.letter}</p>
+      <p> {props.sound}</p>
+      <div>
+      {isHovered && (<LetterInfo />
+      )
+      }
+        </div>
+      
+      
     </td>
   );
 }
@@ -21,9 +38,16 @@ function LetterTable(props) {
   }
 
   return (
-    <table>
-      <tbody>{rows}</tbody>
-    </table>
+    <div className="grid-container">
+      {props.items.map((expense) => (
+          <LetterCell
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+    </div>
+    
   );
 }
 

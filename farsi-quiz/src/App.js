@@ -89,14 +89,14 @@ function App() {
     ['<span style="color:black">غ<span><span style="color:white">ر<span>', "gh"], // final-after-non-connector
     ['<span style="color:white">ش<span><span style="color:black">غ<span><span style="color:white">ش<span>', "gh"], // medial
     ["غ", "gh"],
-    ['<span style="color:white">ش<span><span style="color:black">ع<span>', "gh"], // final-after-connector
-    ['<span style="color:black">ع<span><span style="color:white">ر<span>', "gh"], // final-after-non-connector
-    ['<span style="color:white">ش<span><span style="color:black">ع<span><span style="color:white">ش<span>', "gh"], // medial
-    ["ع", "gh"],
-    ['<span style="color:white">ش<span><span style="color:black">ه<span>', "gh"], // final-after-connector
-    ['<span style="color:black">ه<span><span style="color:white">ر<span>', "gh"], // final-after-non-connector
-    ['<span style="color:white">ش<span><span style="color:black">ه<span><span style="color:white">ش<span>', "gh"], // medial
-    ["ه", "gh"],
+    ['<span style="color:white">ش<span><span style="color:black">ع<span>', "a"], // final-after-connector
+    ['<span style="color:black">ع<span><span style="color:white">ر<span>', "a"], // final-after-non-connector
+    ['<span style="color:white">ش<span><span style="color:black">ع<span><span style="color:white">ش<span>', "a"], // medial
+    ["ع", "a"],
+    ['<span style="color:white">ش<span><span style="color:black">ه<span>', "h"], // final-after-connector
+    ['<span style="color:black">ه<span><span style="color:white">ر<span>', "h"], // final-after-non-connector
+    ['<span style="color:white">ش<span><span style="color:black">ه<span><span style="color:white">ش<span>', "h"], // medial
+    ["ه", "h"],
     ["ا", "a"],
   ];
 
