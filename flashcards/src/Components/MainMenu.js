@@ -10,7 +10,7 @@ function MainMenu() {
   return (
     <div>
       <button onClick={handleStudy}>Study</button>
-      <button type="submit" onClick={handleDeck}>Create New Deck</button>
+      <button type="submit" onClick={handleDeck}>Edit Decks</button>
       
     </div>
   );
