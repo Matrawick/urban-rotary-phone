@@ -1,4 +1,5 @@
 import React from "react";
+import './DeckMenu.css'; 
 
 function DeckMenu() {
 
@@ -14,3 +15,5 @@ function DeckMenu() {
         </div>
     )
 }
+
+export default DeckMenu;
