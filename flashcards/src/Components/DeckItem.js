@@ -19,9 +19,9 @@ const DeckItem = (props) => {
   return (
     <div>
       <div>
-        <button onClick={studyDeck}>{props.name} </button> <span>{props.num_learned}</span><span>{props.num_to_learn}</span>
+        <button onClick={studyDeck}>{props.name} </button>
       </div>
-      {isStudyVisible && <StudyMenu />}
+      {isStudyVisible && <StudyMenu deckId={props.id} />}
     </div>
   );
 };

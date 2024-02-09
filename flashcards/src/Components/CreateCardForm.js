@@ -7,6 +7,9 @@ function CreateCardForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     props.createCardFunc(cardFront, cardBack);
+    setCardFront("");
+    setCardBack("");
+    
   };
 
   const handleInputFrontChange = (e) => {
