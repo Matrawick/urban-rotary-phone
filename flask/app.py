@@ -8,6 +8,11 @@ CORS(app)
 # Configuration
 DATABASE = 'database.db'
 
+@app.before_request
+def before_request():
+    if request.method == 'OPTIONS':
+        return '', 200
+
 def connect_db():
     return sqlite3.connect(DATABASE)
 
@@ -52,14 +57,50 @@ def get_decks():
         print(data)
     return jsonify(data)
 
-@app.route('/add', methods=['POST'])
-def add():
-    task = request.form['task']
-    with connect_db() as connection:
-        cursor = connection.cursor()
-        cursor.execute('INSERT INTO tasks (task) VALUES (?)', (task,))
-        connection.commit()
-    return redirect(url_for('index'))
+@app.route('/add_deck', methods=['POST'])
+def add_deck():
+    try:
+        # Get the JSON data from the request
+        json_data = request.get_json()
+
+        # Perform your processing on the JSON data
+        # For example, print the received JSON data
+        print(json_data)
+        if json_data.get("deckName") is None:
+            response = {'message': 'deckName cannot be None'}
+            return jsonify(response), 400
+        json_data["deckName"] = json_data["deckName"].strip()
+        if len(json_data.get("deckName")) == 0:
+            response = {'message': 'deckName cannot be empty'}
+            return jsonify(response), 400
+
+        try:
+            with connect_db() as connection:
+                cursor = connection.cursor()
+                cursor.execute(
+                    'INSERT INTO DECKS (DeckName) VALUES (?)', (json_data["deckName"],)
+                    )
+                cursor.execute('SELECT last_insert_rowid()')
+                inserted_id = cursor.fetchone()[0]
+                connection.commit()
+        except Exception as e:
+            print(f"Error creating deck: {e}")
+            response = {'message':f'Deck not created: {e}'}
+            return jsonify(response), 400
+            
+
+        # Return a response (optional)
+        response = {
+            'message': f'Deck {json_data["deckName"]} created successfully',
+            'id':inserted_id
+        }
+        return jsonify(response), 200
+
+    except Exception as e:
+        # Handle exceptions if necessary
+        print(f"error: {str(e)}")
+        return jsonify({'error': str(e)}), 400
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
