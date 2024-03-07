@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 
-function CreateCardForm(props) {
-  let [cardFront, setCardFront] = useState("");
-  let [cardBack, setCardBack] = useState("");
+function EditCardForm(props) {
+  let [cardFront, setCardFront] = useState(props.data.front);
+  let [cardBack, setCardBack] = useState(props.data.back);
 
 
-  const addCardToDB = async () => {
+  const editCardInDB = async () => {
     try {
-      const jsonData = { front: cardFront, back: cardBack, deck: props.deck };
-      const response = await fetch("http://localhost:5000/add_card", {
+      console.log("updating card...");
+      console.log(props.data);
+      const jsonData = { front: cardFront, back: cardBack, id: props.data.id };
+      const response = await fetch("http://localhost:5000/edit_card", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,9 +20,7 @@ function CreateCardForm(props) {
       if (response.ok) {
         const result = await response.json();
         console.log(result.message);
-        props.createCardFunc(cardFront, cardBack);
-        setCardFront("");
-        setCardBack("");
+        props.createCardFunc(cardFront, cardBack, props.index);
       } else {
         const data = await response.json();
         const message = data.message;
@@ -33,7 +33,7 @@ function CreateCardForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addCardToDB(cardFront, cardBack);
+    editCardInDB(cardFront, cardBack);
   };
 
   const handleInputFrontChange = (e) => {
@@ -64,10 +64,10 @@ function CreateCardForm(props) {
             placeholder="Enter back front"
           />
         </label>
-        <button type="submit">Submit</button>
+        <button type="submit">Update</button>
       </form>
     </div>
   );
 }
 
-export default CreateCardForm;
+export default EditCardForm;

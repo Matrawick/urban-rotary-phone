@@ -8,12 +8,12 @@ function AppWrapper() {
   let content = <p>Loading....</p>;
 
   function setStudy(value) {
-      setStudyMode(value);
+    setStudyMode(value);
   }
 
   function setDeck(value) {
     setDeckSelected(value);
-}
+  }
 
   if (!isStudyMode) {
     content = (

@@ -27,19 +27,24 @@ def create_table():
         ''')
         connection.commit()
 
-@app.route('/cards/<id>')
-def index(id):
-    with connect_db() as connection:
-        cursor = connection.cursor()
-        cards_query = f"SELECT front, back FROM CARDS WHERE DeckId = {id}"
-        cursor.execute(cards_query)
-        rows = cursor.fetchall()
-        column_names = [desc[0] for desc in cursor.description]
-        data = [dict(zip(column_names, row)) for row in rows]
-
-        print(f"getting cards for deck {id}")
-        print(data)
-    return jsonify(data)
+@app.route('/cards/', methods=['POST'])
+def index():
+    try: 
+        json_data = request.get_json()
+        id = json_data.get("id")
+        with connect_db() as connection:
+            cursor = connection.cursor()
+            cards_query = f"SELECT id, front, back, deckid FROM CARDS WHERE deckid = {id}"
+            cursor.execute(cards_query)
+            rows = cursor.fetchall()
+            column_names = [desc[0] for desc in cursor.description]
+            data = [dict(zip(column_names, row)) for row in rows]
+            print(f"getting cards for deck {id}")
+        return jsonify(data)
+    except Exception as e:
+        print(f"Error fetching cards in deck: {e}")
+        response = {'message':f'Error fetching cards in deck: {e}'}
+        return jsonify(response), 400
 
 @app.route('/decks')
 def get_decks():
@@ -56,6 +61,90 @@ def get_decks():
         #print(dir(jsonify(data)))
         print(data)
     return jsonify(data)
+
+@app.route('/add_card', methods=['POST'])
+def add_card():
+    try:
+        # Get the JSON data from the request
+        json_data = request.get_json()
+
+        # Perform your processing on the JSON data
+        # For example, print the received JSON data
+        print(json_data)
+        if json_data.get("front") is None or json_data.get("front") is None or json_data.get("deck") is None:
+            response = {'message': 'front, back, or id cannot be None'}
+            return jsonify(response), 400
+        json_data["front"] = json_data["front"].strip()
+        json_data["back"] = json_data["back"].strip()
+        if len(json_data.get("front")) == 0 or len(json_data.get("front")) == 0:
+            response = {'message': 'front or back cannot be empty'}
+            return jsonify(response), 400
+
+        try:
+            with connect_db() as connection:
+                cursor = connection.cursor()
+                cursor.execute(
+                    'INSERT INTO CARDS (front, back, deckid) VALUES (?, ?, ?)',
+                     (json_data["front"], json_data["back"], json_data["deck"],)
+                    )
+                cursor.execute('SELECT last_insert_rowid()')
+                inserted_id = cursor.fetchone()[0]
+                cursor.execute('SELECT * FROM CARDS WHERE id = ?', (inserted_id,))
+                rows = cursor.fetchall()
+                column_names = [desc[0] for desc in cursor.description]
+                data = [dict(zip(column_names, row)) for row in rows]
+                connection.commit()
+            return jsonify(data), 200
+        except Exception as e:
+            print(f"Error creating deck: {e}")
+            response = {'message':f'Deck not created: {e}'}
+            return jsonify(response), 400
+    except Exception as e:
+        # Handle exceptions if necessary
+        print(f"error: {str(e)}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/edit_card', methods=['POST'])
+def edit_card():
+    try:
+        # Get the JSON data from the request
+        json_data = request.get_json()
+
+        # Perform your processing on the JSON data
+        # For example, print the received JSON data
+        print(json_data)
+        if json_data.get("front") is None or json_data.get("front") is None or json_data.get("id") is None:
+            response = {'message': 'front, back, or card id cannot be None'}
+            return jsonify(response), 400
+        json_data["front"] = json_data["front"].strip()
+        json_data["back"] = json_data["back"].strip()
+        if len(json_data.get("front")) == 0 or len(json_data.get("front")) == 0:
+            response = {'message': 'front or back cannot be empty'}
+            return jsonify(response), 400
+
+        try:
+            with connect_db() as connection:
+                cursor = connection.cursor()
+                cursor.execute(
+                    'UPDATE CARDS SET front = ?, back = ? WHERE id = ?',
+                     (json_data["front"], json_data["back"], json_data["id"],)
+                    )
+                cursor.execute('SELECT last_insert_rowid()')
+                inserted_id = cursor.fetchone()[0]
+                cursor.execute('SELECT * FROM CARDS WHERE id = ?', (inserted_id,))
+                rows = cursor.fetchall()
+                column_names = [desc[0] for desc in cursor.description]
+                data = [dict(zip(column_names, row)) for row in rows]
+                connection.commit()
+            return jsonify(data), 200
+        except Exception as e:
+            print(f"Error creating deck: {e}")
+            response = {'message':f'Deck not created: {e}'}
+            return jsonify(response), 400
+    except Exception as e:
+        # Handle exceptions if necessary
+        print(f"error: {str(e)}")
+        return jsonify({'error': str(e)}), 400
 
 @app.route('/add_deck', methods=['POST'])
 def add_deck():

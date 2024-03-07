@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 
-
 const DeckItem = (props) => {
-
-    
-
-    const studyDeck = () => {
-        props.setStudyMode(true);
-        props.setDeckSelected(props.deckId);
-    };
+  const studyDeck = () => {
+    props.setStudyMode(true);
+    props.setDeckSelected(props.deckId);
+  };
 
   return (
     <div>

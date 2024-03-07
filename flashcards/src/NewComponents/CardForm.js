@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 
-function CreateCardForm(props) {
-  let [cardFront, setCardFront] = useState("");
-  let [cardBack, setCardBack] = useState("");
+function CardForm(props) {
+  let [cardFront, setCardFront] = useState(props.formOptions.cardData.front);
+  let [cardBack, setCardBack] = useState(props.formOptions.cardData.back);
 
+  const handleInputFrontChange = (e) => {
+    setCardFront(e.target.value);
+  };
+  const handleInputBackChange = (e) => {
+    setCardBack(e.target.value);
+  };
 
   const addCardToDB = async () => {
     try {
@@ -36,13 +42,6 @@ function CreateCardForm(props) {
     addCardToDB(cardFront, cardBack);
   };
 
-  const handleInputFrontChange = (e) => {
-    setCardFront(e.target.value);
-  };
-  const handleInputBackChange = (e) => {
-    setCardBack(e.target.value);
-  };
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -64,10 +63,10 @@ function CreateCardForm(props) {
             placeholder="Enter back front"
           />
         </label>
-        <button type="submit">Submit</button>
+        <button type="submit">{props.formOptions.formButtonText}</button>
       </form>
     </div>
   );
 }
 
-export default CreateCardForm;
+export default CardForm;

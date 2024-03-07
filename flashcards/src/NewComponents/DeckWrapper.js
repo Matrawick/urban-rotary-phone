@@ -15,7 +15,6 @@ function DeckWrapper(props) {
       }
       const data = await response.json();
       console.log(response);
-      console.log(data);
       const transformedMovies = data.map((deckData) => {
         return {
           name: deckData.DeckName,
@@ -23,7 +22,6 @@ function DeckWrapper(props) {
         };
       });
       setDeckList(transformedMovies);
-      console.log(transformedMovies);
     } catch (error) {
       console.log(error);
       setError(error.message);
